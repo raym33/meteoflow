@@ -96,16 +96,29 @@ export const RainRadarCard: React.FC<RainRadarProps> = ({ lat, lon }) => {
   const zoom = 7;
   const tileSize = 256;
 
-  // Convert lat/lon to tile coordinates
-  const getTileCoords = (lat: number, lon: number, zoom: number) => {
+  // Convert lat/lon to tile coordinates (returns fractional values for precise positioning)
+  const getTileCoordsExact = (lat: number, lon: number, zoom: number) => {
     const n = Math.pow(2, zoom);
-    const x = Math.floor((lon + 180) / 360 * n);
+    const x = (lon + 180) / 360 * n;
     const latRad = lat * Math.PI / 180;
-    const y = Math.floor((1 - Math.log(Math.tan(latRad) + 1 / Math.cos(latRad)) / Math.PI) / 2 * n);
+    const y = (1 - Math.log(Math.tan(latRad) + 1 / Math.cos(latRad)) / Math.PI) / 2 * n;
     return { x, y };
   };
 
-  const { x: tileX, y: tileY } = getTileCoords(lat, lon, zoom);
+  const exactCoords = getTileCoordsExact(lat, lon, zoom);
+  const tileX = Math.floor(exactCoords.x);
+  const tileY = Math.floor(exactCoords.y);
+
+  // Calculate the position of the city marker within the 3x3 tile grid
+  // The fractional part (0-1) represents position within the center tile
+  // We need to map this to the full grid where center tile is in the middle (33.33% - 66.66%)
+  const fracX = exactCoords.x - tileX; // 0 to 1 within center tile
+  const fracY = exactCoords.y - tileY; // 0 to 1 within center tile
+
+  // Map to full grid: center tile spans from 33.33% to 66.66%
+  // So position = 33.33% + (fraction * 33.33%)
+  const markerX = (1 + fracX) / 3 * 100; // (1 + frac) because center tile is column 2 of 3
+  const markerY = (1 + fracY) / 3 * 100; // (1 + frac) because center tile is row 2 of 3
 
   // Get surrounding tiles for better coverage
   const tiles = [
@@ -185,8 +198,11 @@ export const RainRadarCard: React.FC<RainRadarProps> = ({ lat, lon }) => {
               </div>
             )}
 
-            {/* Center marker */}
-            <div className="center-marker">
+            {/* Center marker - positioned at exact city coordinates */}
+            <div
+              className="center-marker"
+              style={{ left: `${markerX}%`, top: `${markerY}%` }}
+            >
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <circle cx="12" cy="12" r="8" fill="var(--accent)" fillOpacity="0.3" />
                 <circle cx="12" cy="12" r="4" fill="var(--accent)" />
@@ -334,8 +350,6 @@ export const RainRadarCard: React.FC<RainRadarProps> = ({ lat, lon }) => {
 
         .center-marker {
           position: absolute;
-          top: 50%;
-          left: 50%;
           transform: translate(-50%, -50%);
           z-index: 10;
           pointer-events: none;
