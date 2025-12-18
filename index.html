@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1" />
+    <meta name="theme-color" content="#0066ff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#4d94ff" media="(prefers-color-scheme: dark)" />
+    <meta name="description" content="MeteoFlow 3D - Aplicacion meteorologica inmersiva con escenas 3D en tiempo real y datos de Open-Meteo" />
+    <meta name="keywords" content="meteo, weather, tiempo, clima, 3D, WebGL, Three.js, forecast, pronostico" />
+    <meta name="author" content="MeteoFlow" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="MeteoFlow 3D" />
+    <meta name="mobile-web-app-capable" content="yes" />
+
+    <!-- Open Graph / Social -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MeteoFlow 3D - Clima en Tiempo Real" />
+    <meta property="og:description" content="Experiencia meteorologica inmersiva con escenas 3D y datos en tiempo real" />
+    <meta property="og:image" content="/og-image.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <!-- Preconnect to APIs -->
+    <link rel="preconnect" href="https://api.open-meteo.com" />
+    <link rel="preconnect" href="https://air-quality-api.open-meteo.com" />
+    <link rel="preconnect" href="https://geocoding-api.open-meteo.com" />
+    <link rel="preconnect" href="https://marine-api.open-meteo.com" />
+
+    <title>MeteoFlow 3D - Clima en Tiempo Real</title>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html, body {
+        font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        background: #000;
+        color: #fff;
+        overflow-x: hidden;
+      }
+
+      #root {
+        min-height: 100vh;
+        min-height: 100dvh;
+      }
+
+      .initial-loader {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 24px;
+        background: linear-gradient(135deg, #0a0a1a 0%, #1a1a2e 50%, #0f0f23 100%);
+        z-index: 9999;
+      }
+
+      .loader-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .loader-icon {
+        width: 80px;
+        height: 80px;
+        animation: pulse 2s ease-in-out infinite;
+      }
+
+      .loader-icon svg {
+        width: 100%;
+        height: 100%;
+      }
+
+      .loader-spinner {
+        width: 48px;
+        height: 48px;
+        border: 3px solid rgba(255,255,255,0.1);
+        border-top-color: #4d94ff;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+
+      .loader-text {
+        font-size: 16px;
+        font-weight: 500;
+        color: rgba(255,255,255,0.7);
+        letter-spacing: 0.5px;
+      }
+
+      .loader-subtext {
+        font-size: 12px;
+        color: rgba(255,255,255,0.4);
+      }
+
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+
+      @keyframes pulse {
+        0%, 100% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(1.05); opacity: 0.8; }
+      }
+
+      /* Stars background */
+      .stars {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+      }
+
+      .star {
+        position: absolute;
+        width: 2px;
+        height: 2px;
+        background: white;
+        border-radius: 50%;
+        animation: twinkle 3s ease-in-out infinite;
+      }
+
+      @keyframes twinkle {
+        0%, 100% { opacity: 0.3; }
+        50% { opacity: 1; }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root">
+      <div class="initial-loader">
+        <div class="stars">
+          <script>
+            for(let i = 0; i < 50; i++) {
+              const star = document.createElement('div');
+              star.className = 'star';
+              star.style.left = Math.random() * 100 + '%';
+              star.style.top = Math.random() * 100 + '%';
+              star.style.animationDelay = Math.random() * 3 + 's';
+              star.style.width = (Math.random() * 2 + 1) + 'px';
+              star.style.height = star.style.width;
+              document.querySelector('.stars').appendChild(star);
+            }
+          </script>
+        </div>
+        <div class="loader-content">
+          <div class="loader-icon">
+            <svg viewBox="0 0 80 80" fill="none">
+              <circle cx="40" cy="40" r="35" stroke="url(#grad)" stroke-width="3"/>
+              <circle cx="40" cy="40" r="15" fill="url(#grad)"/>
+              <line x1="40" y1="3" x2="40" y2="15" stroke="url(#grad)" stroke-width="3" stroke-linecap="round"/>
+              <line x1="40" y1="65" x2="40" y2="77" stroke="url(#grad)" stroke-width="3" stroke-linecap="round"/>
+              <line x1="3" y1="40" x2="15" y2="40" stroke="url(#grad)" stroke-width="3" stroke-linecap="round"/>
+              <line x1="65" y1="40" x2="77" y2="40" stroke="url(#grad)" stroke-width="3" stroke-linecap="round"/>
+              <defs>
+                <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#4d94ff"/>
+                  <stop offset="100%" stop-color="#00bcd4"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+          <div class="loader-spinner"></div>
+          <span class="loader-text">Cargando MeteoFlow 3D</span>
+          <span class="loader-subtext">Preparando escena WebGL...</span>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="/src/index.tsx"></script>
+  </body>
+</html>
