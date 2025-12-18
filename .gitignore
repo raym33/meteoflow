@@ -1,0 +1,27 @@
+# Dependencies
+node_modules
+npm-debug.log
+yarn-error.log
+pnpm-debug.log
+lerna-debug.log
+
+# Build outputs
+dist
+*.local
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Build cache
+tsc-cache
+vite-cache
