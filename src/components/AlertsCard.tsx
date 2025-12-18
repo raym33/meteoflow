@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import type { Alert } from '../services/alertsApi';
-import { getAlertIcon, getAlertColor, getSeverityLabel, fetchAllAlerts } from '../services/alertsApi';
+import { getAlertIcon, getAlertColor, fetchAllAlerts } from '../services/alertsApi';
+import { getLocaleForLanguage } from '../services/weatherApi';
+import { useLanguage } from '../i18n/LanguageContext';
 
 interface AlertsCardProps {
   lat: number;
@@ -19,6 +21,8 @@ export const AlertsCard: React.FC<AlertsCardProps> = ({
   windSpeed,
   precipitation,
 }) => {
+  const { t, language } = useLanguage();
+  const locale = getLocaleForLanguage(language);
   const [alerts, setAlerts] = useState<Alert[]>([]);
   const [loading, setLoading] = useState(true);
   const [expandedId, setExpandedId] = useState<string | null>(null);
@@ -49,7 +53,7 @@ export const AlertsCard: React.FC<AlertsCardProps> = ({
   const formatTime = (isoString?: string) => {
     if (!isoString) return '';
     const date = new Date(isoString);
-    return date.toLocaleString('es-ES', {
+    return date.toLocaleString(locale, {
       day: 'numeric',
       month: 'short',
       hour: '2-digit',
@@ -57,11 +61,21 @@ export const AlertsCard: React.FC<AlertsCardProps> = ({
     });
   };
 
+  const severityLabels: Record<Alert['severity'], string> = {
+    extreme: t.severityExtreme,
+    severe: t.severitySevere,
+    moderate: t.severityModerate,
+    minor: t.severityMinor,
+    info: t.severityInfo,
+  };
+
+  const alertLabel = alerts.length === 1 ? t.alertSingular : t.alertPlural;
+
   if (loading) {
     return (
       <div className="alerts-loading">
         <div className="loading-spinner" />
-        <span>Cargando alertas...</span>
+        <span>{t.loadingAlerts}</span>
 
         <style>{`
           .alerts-loading {
@@ -95,8 +109,8 @@ export const AlertsCard: React.FC<AlertsCardProps> = ({
     return (
       <div className="alerts-empty">
         <div className="empty-icon">✓</div>
-        <h4>Sin alertas activas</h4>
-        <p>No hay alertas meteorológicas o de desastres naturales para tu ubicación.</p>
+        <h4>{t.noAlerts}</h4>
+        <p>{t.noAlertsDescription}</p>
 
         <style>{`
           .alerts-empty {
@@ -142,7 +156,7 @@ export const AlertsCard: React.FC<AlertsCardProps> = ({
   return (
     <div className="alerts-container">
       <div className="alerts-summary">
-        <span className="alert-count">{alerts.length} alerta{alerts.length !== 1 ? 's' : ''}</span>
+        <span className="alert-count">{alerts.length} {alertLabel}</span>
         <div className="severity-badges">
           {['extreme', 'severe', 'moderate'].map(severity => {
             const count = alerts.filter(a => a.severity === severity).length;
@@ -176,7 +190,7 @@ export const AlertsCard: React.FC<AlertsCardProps> = ({
                     className="alert-severity"
                     style={{ background: getAlertColor(alert.severity) }}
                   >
-                    {getSeverityLabel(alert.severity)}
+                    {severityLabels[alert.severity] || t.severityUnknown}
                   </span>
                 </div>
                 <span className="alert-location">{alert.location}</span>
@@ -201,32 +215,32 @@ export const AlertsCard: React.FC<AlertsCardProps> = ({
                 <div className="alert-meta">
                   {alert.startTime && (
                     <div className="meta-item">
-                      <span className="meta-label">Inicio</span>
+                      <span className="meta-label">{t.start}</span>
                       <span className="meta-value">{formatTime(alert.startTime)}</span>
                     </div>
                   )}
                   {alert.endTime && (
                     <div className="meta-item">
-                      <span className="meta-label">Fin</span>
+                      <span className="meta-label">{t.end}</span>
                       <span className="meta-value">{formatTime(alert.endTime)}</span>
                     </div>
                   )}
                   {alert.magnitude && (
                     <div className="meta-item">
-                      <span className="meta-label">Magnitud</span>
+                      <span className="meta-label">{t.magnitude}</span>
                       <span className="meta-value">M{alert.magnitude.toFixed(1)}</span>
                     </div>
                   )}
                   {alert.distance && (
                     <div className="meta-item">
-                      <span className="meta-label">Distancia</span>
+                      <span className="meta-label">{t.distance}</span>
                       <span className="meta-value">{alert.distance} km</span>
                     </div>
                   )}
                 </div>
 
                 <div className="alert-footer">
-                  <span className="alert-source">Fuente: {alert.source}</span>
+                  <span className="alert-source">{t.source}: {alert.source}</span>
                   {alert.url && (
                     <a
                       href={alert.url}
@@ -235,7 +249,7 @@ export const AlertsCard: React.FC<AlertsCardProps> = ({
                       className="alert-link"
                       onClick={(e) => e.stopPropagation()}
                     >
-                      Más info →
+                      {t.moreInfo} →
                     </a>
                   )}
                 </div>

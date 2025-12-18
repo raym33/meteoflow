@@ -11,7 +11,7 @@ interface DailyForecastCardProps {
 
 export const DailyForecastCard: React.FC<DailyForecastCardProps> = ({ days }) => {
   const [expandedDay, setExpandedDay] = useState<number | null>(null);
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
 
   const allTemps = days.flatMap(d => [d.temperatureMin, d.temperatureMax]);
   const minTemp = Math.min(...allTemps);
@@ -36,11 +36,11 @@ export const DailyForecastCard: React.FC<DailyForecastCardProps> = ({ days }) =>
   const getDayName = (dateStr: string, index: number): string => {
     if (index === 0) return t.today;
     if (index === 1) return t.tomorrow;
-    return formatDate(dateStr, { weekday: 'short' });
+    return formatDate(dateStr, { weekday: 'short' }, language);
   };
 
   const getDateStr = (dateStr: string): string => {
-    return formatDate(dateStr, { day: 'numeric', month: 'short' });
+    return formatDate(dateStr, { day: 'numeric', month: 'short' }, language);
   };
 
   const getBarPosition = (min: number, max: number) => {

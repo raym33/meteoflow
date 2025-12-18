@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect, createContext, useContext } from 'react';
+import { useLanguage } from '../i18n/LanguageContext';
 
 // ============================================================================
 // SCREEN SIZE DETECTION
@@ -131,9 +132,12 @@ export const DraggableCard: React.FC<DraggableCardProps> = ({
   isDragging,
   draggedOver,
 }) => {
+  const { t } = useLanguage();
   const screen = useScreen();
   const cardRef = useRef<HTMLDivElement>(null);
   const [isResizing, setIsResizing] = useState(false);
+  const titleLabel = (t as unknown as Record<string, string>)[title] || title;
+  const sizeLabel = size === 'small' ? t.expand : t.collapse;
 
   const handleDragStart = (e: React.DragEvent) => {
     e.dataTransfer.setData('cardId', id);
@@ -182,13 +186,13 @@ export const DraggableCard: React.FC<DraggableCardProps> = ({
             <circle cx="19" cy="19" r="2" />
           </svg>
         </div>
-        <span className="card-title">{title}</span>
+        <span className="card-title">{titleLabel}</span>
         <button
           className="size-toggle"
           onClick={toggleSize}
           onMouseDown={() => setIsResizing(true)}
           onMouseUp={() => setIsResizing(false)}
-          title={size === 'small' ? 'Ampliar' : 'Reducir'}
+          title={sizeLabel}
         >
           {size === 'small' ? (
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -473,18 +477,29 @@ export const DraggableGrid: React.FC<DraggableGridProps> = ({
 // ============================================================================
 
 export const ScreenInfoDisplay: React.FC = () => {
+  const { t } = useLanguage();
   const screen = useScreen();
+  const screenTypeLabels: Record<ScreenType, string> = {
+    mobile: t.screenMobile,
+    tablet: t.screenTablet,
+    desktop: t.screenDesktop,
+    large: t.screenLarge,
+  };
+  const orientationLabels: Record<ScreenInfo['orientation'], string> = {
+    portrait: t.portrait,
+    landscape: t.landscape,
+  };
 
   return (
     <div className="screen-info">
       <div className="screen-badge" data-type={screen.type}>
-        {screen.type.toUpperCase()}
+        {(screenTypeLabels[screen.type] || screen.type).toUpperCase()}
       </div>
       <span className="screen-dims">
         {screen.width}×{screen.height}
       </span>
-      {screen.isTouch && <span className="touch-badge">TOUCH</span>}
-      <span className="orientation-badge">{screen.orientation}</span>
+      {screen.isTouch && <span className="touch-badge">{t.touch}</span>}
+      <span className="orientation-badge">{orientationLabels[screen.orientation]}</span>
 
       <style>{`
         .screen-info {

@@ -49,6 +49,11 @@ export interface Translations {
   uvHigh: string;
   uvVeryHigh: string;
   uvExtreme: string;
+  uvAdviceLow: string;
+  uvAdviceModerate: string;
+  uvAdviceHigh: string;
+  uvAdviceVeryHigh: string;
+  uvAdviceExtreme: string;
 
   // AQI
   aqiGood: string;
@@ -56,6 +61,12 @@ export interface Translations {
   aqiModerate: string;
   aqiPoor: string;
   aqiVeryPoor: string;
+  airQualityIndex: string;
+  aqiGoodAdvice: string;
+  aqiFairAdvice: string;
+  aqiModerateAdvice: string;
+  aqiPoorAdvice: string;
+  aqiVeryPoorAdvice: string;
 
   // Forecast
   hourlyForecast: string;
@@ -78,11 +89,18 @@ export interface Translations {
   sunrise: string;
   sunset: string;
   dayLength: string;
+  sunAndUv: string;
 
   // Wind
   windSpeed: string;
   gusts: string;
   windDirection: string;
+  intensity: string;
+  windCalm: string;
+  windBreeze: string;
+  windModerate: string;
+  windStrong: string;
+  windVeryStrong: string;
 
   // Cardinal directions
   north: string;
@@ -97,11 +115,34 @@ export interface Translations {
   // Alerts
   alerts: string;
   noAlerts: string;
+  alertSingular: string;
+  alertPlural: string;
+  loadingAlerts: string;
+  noAlertsDescription: string;
+  start: string;
+  end: string;
+  magnitude: string;
+  distance: string;
+  source: string;
+  moreInfo: string;
+  severityExtreme: string;
+  severitySevere: string;
+  severityModerate: string;
+  severityMinor: string;
+  severityInfo: string;
+  severityUnknown: string;
 
   // Historical
   historicalData: string;
   last7Days: string;
   average: string;
+  viewHistory: string;
+  close: string;
+  days: string;
+  loadingHistory: string;
+  minLabel: string;
+  maxLabel: string;
+  trend: string;
 
   // Settings
   settings: string;
@@ -114,8 +155,17 @@ export interface Translations {
   marine: string;
   marineConditions: string;
   waveHeight: string;
+  wavePeriod: string;
+  swellHeight: string;
   swellDirection: string;
   seaTemperature: string;
+  from: string;
+  seaCalm: string;
+  seaRippled: string;
+  seaSlight: string;
+  seaModerate: string;
+  seaRough: string;
+  seaVeryRough: string;
 
   // Radar
   radar: string;
@@ -126,6 +176,15 @@ export interface Translations {
   // UI Elements
   large: string;
   small: string;
+  expand: string;
+  collapse: string;
+  screenMobile: string;
+  screenTablet: string;
+  screenDesktop: string;
+  screenLarge: string;
+  touch: string;
+  portrait: string;
+  landscape: string;
   customizeDashboard: string;
   dragToReorder: string;
   resetLayout: string;
@@ -133,6 +192,7 @@ export interface Translations {
   realTimeAlerts: string;
   noMarineData: string;
   useCurrentLocation: string;
+  currentLocation: string;
 
   // Weather descriptions
   clearSky: string;
@@ -179,6 +239,11 @@ export const translations: Record<Language, Translations> = {
     uvHigh: 'Alto',
     uvVeryHigh: 'Muy Alto',
     uvExtreme: 'Extremo',
+    uvAdviceLow: 'No se requiere protección',
+    uvAdviceModerate: 'Use protección solar',
+    uvAdviceHigh: 'Protección solar necesaria',
+    uvAdviceVeryHigh: 'Evite exposición prolongada',
+    uvAdviceExtreme: 'Evite salir al sol',
 
     // AQI
     aqiGood: 'Buena',
@@ -186,6 +251,12 @@ export const translations: Record<Language, Translations> = {
     aqiModerate: 'Moderada',
     aqiPoor: 'Mala',
     aqiVeryPoor: 'Muy Mala',
+    airQualityIndex: 'Índice AQI Europeo',
+    aqiGoodAdvice: 'Ideal para actividades al aire libre',
+    aqiFairAdvice: 'Aceptable para la mayoría de personas',
+    aqiModerateAdvice: 'Grupos sensibles pueden verse afectados',
+    aqiPoorAdvice: 'Evite actividades intensas al exterior',
+    aqiVeryPoorAdvice: 'Permanezca en interiores si es posible',
 
     // Forecast
     hourlyForecast: 'Pronóstico por Hora',
@@ -208,11 +279,18 @@ export const translations: Record<Language, Translations> = {
     sunrise: 'Amanecer',
     sunset: 'Atardecer',
     dayLength: 'Duración del día',
+    sunAndUv: 'Sol y UV',
 
     // Wind
     windSpeed: 'Velocidad del Viento',
     gusts: 'Ráfagas',
     windDirection: 'Dirección',
+    intensity: 'Intensidad',
+    windCalm: 'Calmado',
+    windBreeze: 'Brisa',
+    windModerate: 'Moderado',
+    windStrong: 'Fuerte',
+    windVeryStrong: 'Muy fuerte',
 
     // Cardinal directions
     north: 'N',
@@ -227,11 +305,34 @@ export const translations: Record<Language, Translations> = {
     // Alerts
     alerts: 'Alertas',
     noAlerts: 'Sin alertas activas',
+    alertSingular: 'alerta',
+    alertPlural: 'alertas',
+    loadingAlerts: 'Cargando alertas...',
+    noAlertsDescription: 'No hay alertas meteorológicas o de desastres naturales para tu ubicación.',
+    start: 'Inicio',
+    end: 'Fin',
+    magnitude: 'Magnitud',
+    distance: 'Distancia',
+    source: 'Fuente',
+    moreInfo: 'Más info',
+    severityExtreme: 'Extremo',
+    severitySevere: 'Severo',
+    severityModerate: 'Moderado',
+    severityMinor: 'Menor',
+    severityInfo: 'Informativo',
+    severityUnknown: 'Desconocido',
 
     // Historical
     historicalData: 'Datos Históricos',
     last7Days: 'Últimos 7 días',
     average: 'Promedio',
+    viewHistory: 'Ver historial',
+    close: 'Cerrar',
+    days: 'días',
+    loadingHistory: 'Cargando historial...',
+    minLabel: 'Mínimo',
+    maxLabel: 'Máximo',
+    trend: 'Tendencia',
 
     // Settings
     settings: 'Configuración',
@@ -244,8 +345,17 @@ export const translations: Record<Language, Translations> = {
     marine: 'Marino',
     marineConditions: 'Condiciones Marinas',
     waveHeight: 'Altura de ola',
+    wavePeriod: 'Período',
+    swellHeight: 'Oleaje fondo',
     swellDirection: 'Dirección del oleaje',
     seaTemperature: 'Temp. del mar',
+    from: 'Desde',
+    seaCalm: 'Calma',
+    seaRippled: 'Mar rizada',
+    seaSlight: 'Marejadilla',
+    seaModerate: 'Marejada',
+    seaRough: 'Fuerte marejada',
+    seaVeryRough: 'Mar gruesa',
 
     // Radar
     radar: 'Radar',
@@ -256,6 +366,15 @@ export const translations: Record<Language, Translations> = {
     // UI Elements
     large: 'Grande',
     small: 'Pequeño',
+    expand: 'Ampliar',
+    collapse: 'Reducir',
+    screenMobile: 'Móvil',
+    screenTablet: 'Tablet',
+    screenDesktop: 'Escritorio',
+    screenLarge: 'Grande',
+    touch: 'Táctil',
+    portrait: 'Retrato',
+    landscape: 'Paisaje',
     customizeDashboard: 'Personalizar Dashboard',
     dragToReorder: 'Arrastra las tarjetas para reordenarlas',
     resetLayout: 'Restablecer Layout',
@@ -263,6 +382,7 @@ export const translations: Record<Language, Translations> = {
     realTimeAlerts: 'Alertas en Tiempo Real',
     noMarineData: 'Datos marinos no disponibles',
     useCurrentLocation: 'Usar ubicación actual',
+    currentLocation: 'Mi ubicación',
 
     // Weather descriptions
     clearSky: 'Despejado',
@@ -308,6 +428,11 @@ export const translations: Record<Language, Translations> = {
     uvHigh: 'High',
     uvVeryHigh: 'Very High',
     uvExtreme: 'Extreme',
+    uvAdviceLow: 'No protection required',
+    uvAdviceModerate: 'Use sun protection',
+    uvAdviceHigh: 'Sun protection needed',
+    uvAdviceVeryHigh: 'Avoid prolonged exposure',
+    uvAdviceExtreme: 'Avoid going out in the sun',
 
     // AQI
     aqiGood: 'Good',
@@ -315,6 +440,12 @@ export const translations: Record<Language, Translations> = {
     aqiModerate: 'Moderate',
     aqiPoor: 'Poor',
     aqiVeryPoor: 'Very Poor',
+    airQualityIndex: 'European AQI Index',
+    aqiGoodAdvice: 'Ideal for outdoor activities',
+    aqiFairAdvice: 'Acceptable for most people',
+    aqiModerateAdvice: 'Sensitive groups may be affected',
+    aqiPoorAdvice: 'Avoid strenuous outdoor activities',
+    aqiVeryPoorAdvice: 'Stay indoors if possible',
 
     // Forecast
     hourlyForecast: 'Hourly Forecast',
@@ -337,11 +468,18 @@ export const translations: Record<Language, Translations> = {
     sunrise: 'Sunrise',
     sunset: 'Sunset',
     dayLength: 'Day length',
+    sunAndUv: 'Sun & UV',
 
     // Wind
     windSpeed: 'Wind Speed',
     gusts: 'Gusts',
     windDirection: 'Direction',
+    intensity: 'Intensity',
+    windCalm: 'Calm',
+    windBreeze: 'Breeze',
+    windModerate: 'Moderate',
+    windStrong: 'Strong',
+    windVeryStrong: 'Very strong',
 
     // Cardinal directions
     north: 'N',
@@ -356,11 +494,34 @@ export const translations: Record<Language, Translations> = {
     // Alerts
     alerts: 'Alerts',
     noAlerts: 'No active alerts',
+    alertSingular: 'alert',
+    alertPlural: 'alerts',
+    loadingAlerts: 'Loading alerts...',
+    noAlertsDescription: 'No weather or disaster alerts for your location.',
+    start: 'Start',
+    end: 'End',
+    magnitude: 'Magnitude',
+    distance: 'Distance',
+    source: 'Source',
+    moreInfo: 'More info',
+    severityExtreme: 'Extreme',
+    severitySevere: 'Severe',
+    severityModerate: 'Moderate',
+    severityMinor: 'Minor',
+    severityInfo: 'Info',
+    severityUnknown: 'Unknown',
 
     // Historical
     historicalData: 'Historical Data',
     last7Days: 'Last 7 days',
     average: 'Average',
+    viewHistory: 'View history',
+    close: 'Close',
+    days: 'days',
+    loadingHistory: 'Loading history...',
+    minLabel: 'Minimum',
+    maxLabel: 'Maximum',
+    trend: 'Trend',
 
     // Settings
     settings: 'Settings',
@@ -373,8 +534,17 @@ export const translations: Record<Language, Translations> = {
     marine: 'Marine',
     marineConditions: 'Marine Conditions',
     waveHeight: 'Wave height',
+    wavePeriod: 'Period',
+    swellHeight: 'Swell height',
     swellDirection: 'Swell direction',
     seaTemperature: 'Sea temperature',
+    from: 'From',
+    seaCalm: 'Calm',
+    seaRippled: 'Ripples',
+    seaSlight: 'Slight',
+    seaModerate: 'Moderate',
+    seaRough: 'Rough',
+    seaVeryRough: 'Very rough',
 
     // Radar
     radar: 'Radar',
@@ -385,6 +555,15 @@ export const translations: Record<Language, Translations> = {
     // UI Elements
     large: 'Large',
     small: 'Small',
+    expand: 'Expand',
+    collapse: 'Collapse',
+    screenMobile: 'Mobile',
+    screenTablet: 'Tablet',
+    screenDesktop: 'Desktop',
+    screenLarge: 'Large',
+    touch: 'Touch',
+    portrait: 'Portrait',
+    landscape: 'Landscape',
     customizeDashboard: 'Customize Dashboard',
     dragToReorder: 'Drag cards to reorder them',
     resetLayout: 'Reset Layout',
@@ -392,6 +571,7 @@ export const translations: Record<Language, Translations> = {
     realTimeAlerts: 'Real-Time Alerts',
     noMarineData: 'Marine data not available',
     useCurrentLocation: 'Use current location',
+    currentLocation: 'My location',
 
     // Weather descriptions
     clearSky: 'Clear sky',
@@ -437,6 +617,11 @@ export const translations: Record<Language, Translations> = {
     uvHigh: 'Élevé',
     uvVeryHigh: 'Très élevé',
     uvExtreme: 'Extrême',
+    uvAdviceLow: 'Aucune protection nécessaire',
+    uvAdviceModerate: 'Utilisez une protection solaire',
+    uvAdviceHigh: 'Protection solaire nécessaire',
+    uvAdviceVeryHigh: 'Évitez l\'exposition prolongée',
+    uvAdviceExtreme: 'Évitez de sortir au soleil',
 
     // AQI
     aqiGood: 'Bonne',
@@ -444,6 +629,12 @@ export const translations: Record<Language, Translations> = {
     aqiModerate: 'Modérée',
     aqiPoor: 'Mauvaise',
     aqiVeryPoor: 'Très mauvaise',
+    airQualityIndex: 'Indice AQI européen',
+    aqiGoodAdvice: 'Idéal pour les activités en plein air',
+    aqiFairAdvice: 'Acceptable pour la plupart des personnes',
+    aqiModerateAdvice: 'Les personnes sensibles peuvent être affectées',
+    aqiPoorAdvice: 'Évitez les activités intenses en extérieur',
+    aqiVeryPoorAdvice: 'Restez à l\'intérieur si possible',
 
     // Forecast
     hourlyForecast: 'Prévisions Horaires',
@@ -466,11 +657,18 @@ export const translations: Record<Language, Translations> = {
     sunrise: 'Lever du soleil',
     sunset: 'Coucher du soleil',
     dayLength: 'Durée du jour',
+    sunAndUv: 'Soleil & UV',
 
     // Wind
     windSpeed: 'Vitesse du Vent',
     gusts: 'Rafales',
     windDirection: 'Direction',
+    intensity: 'Intensité',
+    windCalm: 'Calme',
+    windBreeze: 'Brise',
+    windModerate: 'Modéré',
+    windStrong: 'Fort',
+    windVeryStrong: 'Très fort',
 
     // Cardinal directions
     north: 'N',
@@ -485,11 +683,34 @@ export const translations: Record<Language, Translations> = {
     // Alerts
     alerts: 'Alertes',
     noAlerts: 'Aucune alerte active',
+    alertSingular: 'alerte',
+    alertPlural: 'alertes',
+    loadingAlerts: 'Chargement des alertes...',
+    noAlertsDescription: 'Aucune alerte météo ou catastrophe naturelle pour votre localisation.',
+    start: 'Début',
+    end: 'Fin',
+    magnitude: 'Magnitude',
+    distance: 'Distance',
+    source: 'Source',
+    moreInfo: 'Plus d\'infos',
+    severityExtreme: 'Extrême',
+    severitySevere: 'Sévère',
+    severityModerate: 'Modérée',
+    severityMinor: 'Mineure',
+    severityInfo: 'Info',
+    severityUnknown: 'Inconnu',
 
     // Historical
     historicalData: 'Données Historiques',
     last7Days: '7 derniers jours',
     average: 'Moyenne',
+    viewHistory: 'Voir l\'historique',
+    close: 'Fermer',
+    days: 'jours',
+    loadingHistory: 'Chargement de l\'historique...',
+    minLabel: 'Minimum',
+    maxLabel: 'Maximum',
+    trend: 'Tendance',
 
     // Settings
     settings: 'Paramètres',
@@ -502,8 +723,17 @@ export const translations: Record<Language, Translations> = {
     marine: 'Marin',
     marineConditions: 'Conditions Marines',
     waveHeight: 'Hauteur des vagues',
+    wavePeriod: 'Période',
+    swellHeight: 'Houle',
     swellDirection: 'Direction de la houle',
     seaTemperature: 'Temp. de la mer',
+    from: 'De',
+    seaCalm: 'Calme',
+    seaRippled: 'Ridée',
+    seaSlight: 'Peu agitée',
+    seaModerate: 'Modérée',
+    seaRough: 'Forte',
+    seaVeryRough: 'Très forte',
 
     // Radar
     radar: 'Radar',
@@ -514,6 +744,15 @@ export const translations: Record<Language, Translations> = {
     // UI Elements
     large: 'Grand',
     small: 'Petit',
+    expand: 'Agrandir',
+    collapse: 'Réduire',
+    screenMobile: 'Mobile',
+    screenTablet: 'Tablette',
+    screenDesktop: 'Bureau',
+    screenLarge: 'Grand',
+    touch: 'Tactile',
+    portrait: 'Portrait',
+    landscape: 'Paysage',
     customizeDashboard: 'Personnaliser le tableau de bord',
     dragToReorder: 'Faites glisser les cartes pour les réorganiser',
     resetLayout: 'Réinitialiser la mise en page',
@@ -521,6 +760,7 @@ export const translations: Record<Language, Translations> = {
     realTimeAlerts: 'Alertes en temps réel',
     noMarineData: 'Données marines non disponibles',
     useCurrentLocation: 'Utiliser la position actuelle',
+    currentLocation: 'Ma position',
 
     // Weather descriptions
     clearSky: 'Ciel dégagé',
@@ -566,6 +806,11 @@ export const translations: Record<Language, Translations> = {
     uvHigh: 'Hoch',
     uvVeryHigh: 'Sehr hoch',
     uvExtreme: 'Extrem',
+    uvAdviceLow: 'Kein Schutz erforderlich',
+    uvAdviceModerate: 'Sonnenschutz verwenden',
+    uvAdviceHigh: 'Sonnenschutz erforderlich',
+    uvAdviceVeryHigh: 'Längere Exposition vermeiden',
+    uvAdviceExtreme: 'Sonne meiden',
 
     // AQI
     aqiGood: 'Gut',
@@ -573,6 +818,12 @@ export const translations: Record<Language, Translations> = {
     aqiModerate: 'Mäßig',
     aqiPoor: 'Schlecht',
     aqiVeryPoor: 'Sehr schlecht',
+    airQualityIndex: 'Europäischer AQI-Index',
+    aqiGoodAdvice: 'Ideal für Aktivitäten im Freien',
+    aqiFairAdvice: 'Für die meisten Menschen akzeptabel',
+    aqiModerateAdvice: 'Empfindliche Gruppen können betroffen sein',
+    aqiPoorAdvice: 'Intensive Aktivitäten im Freien vermeiden',
+    aqiVeryPoorAdvice: 'Wenn möglich drinnen bleiben',
 
     // Forecast
     hourlyForecast: 'Stündliche Vorhersage',
@@ -595,11 +846,18 @@ export const translations: Record<Language, Translations> = {
     sunrise: 'Sonnenaufgang',
     sunset: 'Sonnenuntergang',
     dayLength: 'Tageslänge',
+    sunAndUv: 'Sonne & UV',
 
     // Wind
     windSpeed: 'Windgeschwindigkeit',
     gusts: 'Böen',
     windDirection: 'Richtung',
+    intensity: 'Intensität',
+    windCalm: 'Ruhig',
+    windBreeze: 'Brise',
+    windModerate: 'Mäßig',
+    windStrong: 'Stark',
+    windVeryStrong: 'Sehr stark',
 
     // Cardinal directions
     north: 'N',
@@ -614,11 +872,34 @@ export const translations: Record<Language, Translations> = {
     // Alerts
     alerts: 'Warnungen',
     noAlerts: 'Keine aktiven Warnungen',
+    alertSingular: 'Warnung',
+    alertPlural: 'Warnungen',
+    loadingAlerts: 'Warnungen werden geladen...',
+    noAlertsDescription: 'Keine Wetter- oder Katastrophenwarnungen für deinen Standort.',
+    start: 'Beginn',
+    end: 'Ende',
+    magnitude: 'Magnitude',
+    distance: 'Entfernung',
+    source: 'Quelle',
+    moreInfo: 'Mehr Info',
+    severityExtreme: 'Extrem',
+    severitySevere: 'Schwer',
+    severityModerate: 'Mäßig',
+    severityMinor: 'Gering',
+    severityInfo: 'Info',
+    severityUnknown: 'Unbekannt',
 
     // Historical
     historicalData: 'Historische Daten',
     last7Days: 'Letzte 7 Tage',
     average: 'Durchschnitt',
+    viewHistory: 'Verlauf anzeigen',
+    close: 'Schließen',
+    days: 'Tage',
+    loadingHistory: 'Verlauf wird geladen...',
+    minLabel: 'Minimum',
+    maxLabel: 'Maximum',
+    trend: 'Trend',
 
     // Settings
     settings: 'Einstellungen',
@@ -631,8 +912,17 @@ export const translations: Record<Language, Translations> = {
     marine: 'Meer',
     marineConditions: 'Meeresbedingungen',
     waveHeight: 'Wellenhöhe',
+    wavePeriod: 'Periode',
+    swellHeight: 'Dünung',
     swellDirection: 'Dünung-Richtung',
     seaTemperature: 'Meerestemperatur',
+    from: 'Aus',
+    seaCalm: 'Ruhig',
+    seaRippled: 'Kräusel',
+    seaSlight: 'Leicht bewegt',
+    seaModerate: 'Mäßig',
+    seaRough: 'Rau',
+    seaVeryRough: 'Sehr rau',
 
     // Radar
     radar: 'Radar',
@@ -643,6 +933,15 @@ export const translations: Record<Language, Translations> = {
     // UI Elements
     large: 'Groß',
     small: 'Klein',
+    expand: 'Vergrößern',
+    collapse: 'Verkleinern',
+    screenMobile: 'Mobil',
+    screenTablet: 'Tablet',
+    screenDesktop: 'Desktop',
+    screenLarge: 'Groß',
+    touch: 'Touch',
+    portrait: 'Hochformat',
+    landscape: 'Querformat',
     customizeDashboard: 'Dashboard anpassen',
     dragToReorder: 'Karten ziehen zum Neuordnen',
     resetLayout: 'Layout zurücksetzen',
@@ -650,6 +949,7 @@ export const translations: Record<Language, Translations> = {
     realTimeAlerts: 'Echtzeit-Warnungen',
     noMarineData: 'Meeresdaten nicht verfügbar',
     useCurrentLocation: 'Aktuellen Standort verwenden',
+    currentLocation: 'Mein Standort',
 
     // Weather descriptions
     clearSky: 'Klarer Himmel',
@@ -695,6 +995,11 @@ export const translations: Record<Language, Translations> = {
     uvHigh: 'Alto',
     uvVeryHigh: 'Muito Alto',
     uvExtreme: 'Extremo',
+    uvAdviceLow: 'Não é necessária proteção',
+    uvAdviceModerate: 'Use proteção solar',
+    uvAdviceHigh: 'Proteção solar necessária',
+    uvAdviceVeryHigh: 'Evite exposição prolongada',
+    uvAdviceExtreme: 'Evite sair ao sol',
 
     // AQI
     aqiGood: 'Boa',
@@ -702,6 +1007,12 @@ export const translations: Record<Language, Translations> = {
     aqiModerate: 'Moderada',
     aqiPoor: 'Ruim',
     aqiVeryPoor: 'Muito Ruim',
+    airQualityIndex: 'Índice AQI Europeu',
+    aqiGoodAdvice: 'Ideal para atividades ao ar livre',
+    aqiFairAdvice: 'Aceitável para a maioria das pessoas',
+    aqiModerateAdvice: 'Grupos sensíveis podem ser afetados',
+    aqiPoorAdvice: 'Evite atividades intensas ao ar livre',
+    aqiVeryPoorAdvice: 'Permaneça em ambientes internos se possível',
 
     // Forecast
     hourlyForecast: 'Previsão por Hora',
@@ -724,11 +1035,18 @@ export const translations: Record<Language, Translations> = {
     sunrise: 'Nascer do sol',
     sunset: 'Pôr do sol',
     dayLength: 'Duração do dia',
+    sunAndUv: 'Sol e UV',
 
     // Wind
     windSpeed: 'Velocidade do Vento',
     gusts: 'Rajadas',
     windDirection: 'Direção',
+    intensity: 'Intensidade',
+    windCalm: 'Calmo',
+    windBreeze: 'Brisa',
+    windModerate: 'Moderado',
+    windStrong: 'Forte',
+    windVeryStrong: 'Muito forte',
 
     // Cardinal directions
     north: 'N',
@@ -743,11 +1061,34 @@ export const translations: Record<Language, Translations> = {
     // Alerts
     alerts: 'Alertas',
     noAlerts: 'Sem alertas ativos',
+    alertSingular: 'alerta',
+    alertPlural: 'alertas',
+    loadingAlerts: 'Carregando alertas...',
+    noAlertsDescription: 'Não há alertas meteorológicos ou de desastres naturais para sua localização.',
+    start: 'Início',
+    end: 'Fim',
+    magnitude: 'Magnitude',
+    distance: 'Distância',
+    source: 'Fonte',
+    moreInfo: 'Mais info',
+    severityExtreme: 'Extremo',
+    severitySevere: 'Severo',
+    severityModerate: 'Moderado',
+    severityMinor: 'Menor',
+    severityInfo: 'Informativo',
+    severityUnknown: 'Desconhecido',
 
     // Historical
     historicalData: 'Dados Históricos',
     last7Days: 'Últimos 7 dias',
     average: 'Média',
+    viewHistory: 'Ver histórico',
+    close: 'Fechar',
+    days: 'dias',
+    loadingHistory: 'Carregando histórico...',
+    minLabel: 'Mínimo',
+    maxLabel: 'Máximo',
+    trend: 'Tendência',
 
     // Settings
     settings: 'Configurações',
@@ -760,8 +1101,17 @@ export const translations: Record<Language, Translations> = {
     marine: 'Marinho',
     marineConditions: 'Condições Marinhas',
     waveHeight: 'Altura das ondas',
+    wavePeriod: 'Período',
+    swellHeight: 'Ondulação',
     swellDirection: 'Direção da ondulação',
     seaTemperature: 'Temp. do mar',
+    from: 'De',
+    seaCalm: 'Calmo',
+    seaRippled: 'Mar rizado',
+    seaSlight: 'Mar de vaga curta',
+    seaModerate: 'Marejado',
+    seaRough: 'Muito marejado',
+    seaVeryRough: 'Mar grosso',
 
     // Radar
     radar: 'Radar',
@@ -772,6 +1122,15 @@ export const translations: Record<Language, Translations> = {
     // UI Elements
     large: 'Grande',
     small: 'Pequeno',
+    expand: 'Ampliar',
+    collapse: 'Reduzir',
+    screenMobile: 'Celular',
+    screenTablet: 'Tablet',
+    screenDesktop: 'Desktop',
+    screenLarge: 'Grande',
+    touch: 'Toque',
+    portrait: 'Retrato',
+    landscape: 'Paisagem',
     customizeDashboard: 'Personalizar Painel',
     dragToReorder: 'Arraste os cartões para reordenar',
     resetLayout: 'Redefinir Layout',
@@ -779,6 +1138,7 @@ export const translations: Record<Language, Translations> = {
     realTimeAlerts: 'Alertas em Tempo Real',
     noMarineData: 'Dados marinhos não disponíveis',
     useCurrentLocation: 'Usar localização atual',
+    currentLocation: 'Minha localização',
 
     // Weather descriptions
     clearSky: 'Céu limpo',

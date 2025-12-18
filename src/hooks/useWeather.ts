@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import type { WeatherData, Location } from '../types/weather';
 import { getWeatherData, searchLocations, getCurrentPosition, reverseGeocode } from '../services/weatherApi';
+import { useLanguage } from '../i18n/LanguageContext';
 
 const STORAGE_KEY = 'meteoflow_location';
 const DARK_MODE_KEY = 'meteoflow_dark_mode';
@@ -17,6 +18,7 @@ const DEFAULT_LOCATION: Location = {
 };
 
 export function useWeather() {
+  const { language, t } = useLanguage();
   const [data, setData] = useState<WeatherData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -66,14 +68,14 @@ export function useWeather() {
     }
     setSearching(true);
     try {
-      const results = await searchLocations(query);
+      const results = await searchLocations(query, language);
       setSearchResults(results);
     } catch {
       setSearchResults([]);
     } finally {
       setSearching(false);
     }
-  }, []);
+  }, [language]);
 
   // Use current location
   const useCurrentLocation = useCallback(async () => {
@@ -82,13 +84,13 @@ export function useWeather() {
     try {
       const position = await getCurrentPosition();
       const { latitude, longitude } = position.coords;
-      const loc = await reverseGeocode(latitude, longitude);
+      const loc = await reverseGeocode(latitude, longitude, t.currentLocation);
       setLocation(loc);
     } catch (err) {
       setError('No se pudo obtener tu ubicación. Por favor, permite el acceso o busca una ciudad.');
       setLoading(false);
     }
-  }, [setLocation]);
+  }, [setLocation, t.currentLocation]);
 
   // Initial load
   useEffect(() => {

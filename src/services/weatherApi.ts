@@ -10,11 +10,22 @@ import type {
   OpenMeteoAirQualityResponse,
   OpenMeteoMarineResponse,
 } from '../types/weather';
+import type { Language } from '../i18n/translations';
 
 const OPEN_METEO_BASE = 'https://api.open-meteo.com/v1';
 const AIR_QUALITY_BASE = 'https://air-quality-api.open-meteo.com/v1';
 const MARINE_BASE = 'https://marine-api.open-meteo.com/v1';
 const GEOCODING_BASE = 'https://geocoding-api.open-meteo.com/v1';
+
+const LANGUAGE_LOCALES: Record<Language, string> = {
+  es: 'es-ES',
+  en: 'en-US',
+  fr: 'fr-FR',
+  de: 'de-DE',
+  pt: 'pt-BR',
+};
+
+export const getLocaleForLanguage = (language: Language): string => LANGUAGE_LOCALES[language] ?? 'es-ES';
 
 // Weather code to description mapping
 export const weatherCodeMap: Record<number, { description: string; icon: string }> = {
@@ -68,9 +79,9 @@ export const aqiCategoryLabels: Record<AirQuality['category'], { label: string; 
 };
 
 // Search locations
-export async function searchLocations(query: string): Promise<Location[]> {
+export async function searchLocations(query: string, language: Language = 'es'): Promise<Location[]> {
   const response = await fetch(
-    `${GEOCODING_BASE}/search?name=${encodeURIComponent(query)}&count=10&language=es&format=json`
+    `${GEOCODING_BASE}/search?name=${encodeURIComponent(query)}&count=10&language=${language}&format=json`
   );
 
   if (!response.ok) throw new Error('Error buscando ubicaciones');
@@ -291,11 +302,11 @@ export function getCurrentPosition(): Promise<GeolocationPosition> {
 }
 
 // Reverse geocoding
-export async function reverseGeocode(lat: number, lon: number): Promise<Location> {
+export async function reverseGeocode(lat: number, lon: number, label: string = 'Mi ubicación'): Promise<Location> {
   // Open-Meteo doesn't support reverse geocoding directly
   // We'll use a simple approach with the coordinates
   return {
-    name: 'Mi ubicación',
+    name: label,
     region: '',
     country: '',
     latitude: lat,
@@ -312,11 +323,13 @@ export function windDirectionToCardinal(degrees: number): string {
 }
 
 // Format date
-export function formatDate(dateStr: string, options?: Intl.DateTimeFormatOptions): string {
-  return new Date(dateStr).toLocaleDateString('es-ES', options);
+export function formatDate(dateStr: string, options?: Intl.DateTimeFormatOptions, language: Language = 'es'): string {
+  const locale = getLocaleForLanguage(language);
+  return new Date(dateStr).toLocaleDateString(locale, options);
 }
 
 // Format time
-export function formatTime(dateStr: string): string {
-  return new Date(dateStr).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+export function formatTime(dateStr: string, language: Language = 'es'): string {
+  const locale = getLocaleForLanguage(language);
+  return new Date(dateStr).toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' });
 }

@@ -1,8 +1,9 @@
 import React from 'react';
 import type { AirQuality, CurrentWeather, DailyForecast, MarineData } from '../types/weather';
 import { AirVentIcon, SunriseIcon, SunsetIcon, CompassIcon, WavesIcon } from './Icons';
-import { aqiCategoryLabels, windDirectionToCardinal, formatTime } from '../services/weatherApi';
+import { windDirectionToCardinal, formatTime } from '../services/weatherApi';
 import { ClickableValue } from './HistoricalModal';
+import { useLanguage } from '../i18n/LanguageContext';
 
 // Shared styles for info cards
 export const InfoCardStyles: React.FC = () => (
@@ -65,7 +66,36 @@ interface AirQualityCardProps {
 }
 
 export const AirQualityCard: React.FC<AirQualityCardProps> = ({ airQuality }) => {
-  const aqiInfo = aqiCategoryLabels[airQuality.category];
+  const { t } = useLanguage();
+  const aqiColors: Record<AirQuality['category'], string> = {
+    'good': '#22c55e',
+    'moderate': '#eab308',
+    'unhealthy-sensitive': '#f97316',
+    'unhealthy': '#ef4444',
+    'very-unhealthy': '#a855f7',
+    'hazardous': '#7f1d1d',
+  };
+  const aqiLabels: Record<AirQuality['category'], string> = {
+    'good': t.aqiGood,
+    'moderate': t.aqiFair,
+    'unhealthy-sensitive': t.aqiModerate,
+    'unhealthy': t.aqiPoor,
+    'very-unhealthy': t.aqiVeryPoor,
+    'hazardous': t.aqiVeryPoor,
+  };
+  const aqiAdvice: Record<AirQuality['category'], string> = {
+    'good': t.aqiGoodAdvice,
+    'moderate': t.aqiFairAdvice,
+    'unhealthy-sensitive': t.aqiModerateAdvice,
+    'unhealthy': t.aqiPoorAdvice,
+    'very-unhealthy': t.aqiVeryPoorAdvice,
+    'hazardous': t.aqiVeryPoorAdvice,
+  };
+  const aqiInfo = {
+    label: aqiLabels[airQuality.category],
+    color: aqiColors[airQuality.category],
+    advice: aqiAdvice[airQuality.category],
+  };
 
   const pollutants = [
     { name: 'PM2.5', value: airQuality.pm25 ?? 0, unit: 'µg/m³', max: 50, desc: 'Partículas finas' },
@@ -91,8 +121,8 @@ export const AirQualityCard: React.FC<AirQualityCardProps> = ({ airQuality }) =>
           <AirVentIcon size={20} />
         </div>
         <div>
-          <h4 className="info-card-title">Calidad del Aire</h4>
-          <span className="info-card-subtitle">Índice AQI Europeo</span>
+          <h4 className="info-card-title">{t.airQuality}</h4>
+          <span className="info-card-subtitle">{t.airQualityIndex}</span>
         </div>
       </div>
 
@@ -106,11 +136,7 @@ export const AirQualityCard: React.FC<AirQualityCardProps> = ({ airQuality }) =>
               {aqiInfo.label}
             </span>
             <span className="aqi-desc">
-              {aqiInfo.label === 'Buena' && 'Ideal para actividades al aire libre'}
-              {aqiInfo.label === 'Moderada' && 'Aceptable para la mayoría de personas'}
-              {aqiInfo.label === 'Desfavorable' && 'Grupos sensibles pueden verse afectados'}
-              {aqiInfo.label === 'Mala' && 'Evite actividades intensas al exterior'}
-              {aqiInfo.label === 'Muy mala' && 'Permanezca en interiores si es posible'}
+              {aqiInfo.advice}
             </span>
           </div>
         </div>
@@ -123,9 +149,9 @@ export const AirQualityCard: React.FC<AirQualityCardProps> = ({ airQuality }) =>
             />
           </div>
           <div className="aqi-scale-labels">
-            <span>Buena</span>
-            <span>Moderada</span>
-            <span>Mala</span>
+            <span>{t.aqiGood}</span>
+            <span>{t.aqiModerate}</span>
+            <span>{t.aqiPoor}</span>
           </div>
         </div>
 
@@ -282,6 +308,7 @@ interface SunTimesCardProps {
 }
 
 export const SunTimesCard: React.FC<SunTimesCardProps> = ({ today, weather, lat = 0, lon = 0 }) => {
+  const { t, language } = useLanguage();
   const sunrise = new Date(today.sunrise);
   const sunset = new Date(today.sunset);
   const now = new Date();
@@ -294,11 +321,11 @@ export const SunTimesCard: React.FC<SunTimesCardProps> = ({ today, weather, lat 
   const dayMins = Math.floor((dayLength % (1000 * 60 * 60)) / (1000 * 60));
 
   const uvLevel = (uv: number): string => {
-    if (uv <= 2) return 'Bajo';
-    if (uv <= 5) return 'Moderado';
-    if (uv <= 7) return 'Alto';
-    if (uv <= 10) return 'Muy alto';
-    return 'Extremo';
+    if (uv <= 2) return t.uvLow;
+    if (uv <= 5) return t.uvModerate;
+    if (uv <= 7) return t.uvHigh;
+    if (uv <= 10) return t.uvVeryHigh;
+    return t.uvExtreme;
   };
 
   const uvColor = (uv: number): string => {
@@ -310,11 +337,11 @@ export const SunTimesCard: React.FC<SunTimesCardProps> = ({ today, weather, lat 
   };
 
   const uvAdvice = (uv: number): string => {
-    if (uv <= 2) return 'No se requiere protección';
-    if (uv <= 5) return 'Use protección solar';
-    if (uv <= 7) return 'Protección solar necesaria';
-    if (uv <= 10) return 'Evite exposición prolongada';
-    return 'Evite salir al sol';
+    if (uv <= 2) return t.uvAdviceLow;
+    if (uv <= 5) return t.uvAdviceModerate;
+    if (uv <= 7) return t.uvAdviceHigh;
+    if (uv <= 10) return t.uvAdviceVeryHigh;
+    return t.uvAdviceExtreme;
   };
 
   return (
@@ -324,8 +351,8 @@ export const SunTimesCard: React.FC<SunTimesCardProps> = ({ today, weather, lat 
           <SunriseIcon size={20} />
         </div>
         <div>
-          <h4 className="info-card-title">Sol y UV</h4>
-          <span className="info-card-subtitle">{dayHours}h {dayMins}m de luz solar</span>
+          <h4 className="info-card-title">{t.sunAndUv}</h4>
+          <span className="info-card-subtitle">{t.dayLength}: {dayHours}h {dayMins}m</span>
         </div>
       </div>
 
@@ -382,8 +409,8 @@ export const SunTimesCard: React.FC<SunTimesCardProps> = ({ today, weather, lat 
               <SunriseIcon size={18} />
             </div>
             <div className="sun-time-info">
-              <span className="sun-time-label">Amanecer</span>
-              <span className="sun-time-value">{formatTime(today.sunrise)}</span>
+              <span className="sun-time-label">{t.sunrise}</span>
+              <span className="sun-time-value">{formatTime(today.sunrise, language)}</span>
             </div>
           </div>
           <div className="sun-time-item">
@@ -391,8 +418,8 @@ export const SunTimesCard: React.FC<SunTimesCardProps> = ({ today, weather, lat 
               <SunsetIcon size={18} />
             </div>
             <div className="sun-time-info">
-              <span className="sun-time-label">Atardecer</span>
-              <span className="sun-time-value">{formatTime(today.sunset)}</span>
+              <span className="sun-time-label">{t.sunset}</span>
+              <span className="sun-time-value">{formatTime(today.sunset, language)}</span>
             </div>
           </div>
         </div>
@@ -403,7 +430,7 @@ export const SunTimesCard: React.FC<SunTimesCardProps> = ({ today, weather, lat 
               value={weather.uvIndex}
               unit=""
               type="uv"
-              title="Índice UV"
+              title={t.uvIndex}
               lat={lat}
               lon={lon}
               className="uv-clickable"
@@ -622,26 +649,27 @@ interface WindCardProps {
 }
 
 export const WindCard: React.FC<WindCardProps> = ({ weather, lat = 0, lon = 0 }) => {
+  const { t } = useLanguage();
   const cardinal = windDirectionToCardinal(weather.windDirection);
 
   const getWindLevel = (speed: number): { label: string; color: string } => {
-    if (speed < 12) return { label: 'Calmado', color: '#22c55e' };
-    if (speed < 20) return { label: 'Brisa', color: '#4caf50' };
-    if (speed < 30) return { label: 'Moderado', color: '#ff9800' };
-    if (speed < 50) return { label: 'Fuerte', color: '#f97316' };
-    return { label: 'Muy fuerte', color: '#ef4444' };
+    if (speed < 12) return { label: t.windCalm, color: '#22c55e' };
+    if (speed < 20) return { label: t.windBreeze, color: '#4caf50' };
+    if (speed < 30) return { label: t.windModerate, color: '#ff9800' };
+    if (speed < 50) return { label: t.windStrong, color: '#f97316' };
+    return { label: t.windVeryStrong, color: '#ef4444' };
   };
 
   const windLevel = getWindLevel(weather.windSpeed);
 
   return (
     <div className="info-card wind-card">
-      <div className="info-card-header">
-        <div className="info-card-icon">
-          <CompassIcon size={20} />
-        </div>
+        <div className="info-card-header">
+          <div className="info-card-icon">
+            <CompassIcon size={20} />
+          </div>
         <div>
-          <h4 className="info-card-title">Viento</h4>
+          <h4 className="info-card-title">{t.wind}</h4>
           <span className="info-card-subtitle">{windLevel.label}</span>
         </div>
       </div>
@@ -649,10 +677,10 @@ export const WindCard: React.FC<WindCardProps> = ({ weather, lat = 0, lon = 0 })
       <div className="info-card-content">
         <div className="wind-compass">
           <div className="compass-ring">
-            <span className="compass-direction n">N</span>
-            <span className="compass-direction e">E</span>
-            <span className="compass-direction s">S</span>
-            <span className="compass-direction w">O</span>
+            <span className="compass-direction n">{t.north}</span>
+            <span className="compass-direction e">{t.east}</span>
+            <span className="compass-direction s">{t.south}</span>
+            <span className="compass-direction w">{t.west}</span>
 
             <div className="compass-ticks">
               {[...Array(36)].map((_, i) => (
@@ -675,7 +703,7 @@ export const WindCard: React.FC<WindCardProps> = ({ weather, lat = 0, lon = 0 })
             value={weather.windSpeed}
             unit="km/h"
             type="wind"
-            title="Velocidad del Viento"
+            title={t.windSpeed}
             lat={lat}
             lon={lon}
             className="wind-speed-clickable"
@@ -689,17 +717,17 @@ export const WindCard: React.FC<WindCardProps> = ({ weather, lat = 0, lon = 0 })
 
         <div className="wind-stats">
           <div className="wind-stat">
-            <span className="wind-stat-label">Dirección</span>
+            <span className="wind-stat-label">{t.windDirection}</span>
             <span className="wind-stat-value">{cardinal}</span>
             <span className="wind-stat-extra">{weather.windDirection}°</span>
           </div>
           <div className="wind-stat">
-            <span className="wind-stat-label">Ráfagas</span>
+            <span className="wind-stat-label">{t.gusts}</span>
             <span className="wind-stat-value">{Math.round(weather.windGusts)}</span>
             <span className="wind-stat-extra">km/h</span>
           </div>
           <div className="wind-stat">
-            <span className="wind-stat-label">Intensidad</span>
+            <span className="wind-stat-label">{t.intensity}</span>
             <span className="wind-stat-value" style={{ color: windLevel.color }}>{windLevel.label}</span>
           </div>
         </div>
@@ -868,6 +896,7 @@ interface MarineCardProps {
 }
 
 export const MarineCard: React.FC<MarineCardProps> = ({ marine }) => {
+  const { t } = useLanguage();
   const waveHeight = marine.waveHeight ?? 0;
   const wavePeriod = marine.wavePeriod ?? 0;
   const waveDirection = marine.waveDirection ?? 0;
@@ -877,12 +906,12 @@ export const MarineCard: React.FC<MarineCardProps> = ({ marine }) => {
   const waveCardinal = windDirectionToCardinal(waveDirection);
 
   const waveCondition = (height: number): { label: string; color: string } => {
-    if (height < 0.5) return { label: 'Calma', color: '#22c55e' };
-    if (height < 1) return { label: 'Mar rizada', color: '#4caf50' };
-    if (height < 1.5) return { label: 'Marejadilla', color: '#ff9800' };
-    if (height < 2.5) return { label: 'Marejada', color: '#f97316' };
-    if (height < 4) return { label: 'Fuerte marejada', color: '#ef4444' };
-    return { label: 'Mar gruesa', color: '#ef4444' };
+    if (height < 0.5) return { label: t.seaCalm, color: '#22c55e' };
+    if (height < 1) return { label: t.seaRippled, color: '#4caf50' };
+    if (height < 1.5) return { label: t.seaSlight, color: '#ff9800' };
+    if (height < 2.5) return { label: t.seaModerate, color: '#f97316' };
+    if (height < 4) return { label: t.seaRough, color: '#ef4444' };
+    return { label: t.seaVeryRough, color: '#ef4444' };
   };
 
   const condition = waveCondition(waveHeight);
@@ -894,7 +923,7 @@ export const MarineCard: React.FC<MarineCardProps> = ({ marine }) => {
           <WavesIcon size={20} />
         </div>
         <div>
-          <h4 className="info-card-title">Condiciones Marinas</h4>
+          <h4 className="info-card-title">{t.marineConditions}</h4>
           <span className="info-card-subtitle" style={{ color: condition.color }}>{condition.label}</span>
         </div>
       </div>
@@ -910,7 +939,7 @@ export const MarineCard: React.FC<MarineCardProps> = ({ marine }) => {
               <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" style={{ transform: `rotate(${waveDirection}deg)` }}>
                 <path d="M12 19V5M5 12l7-7 7 7" />
               </svg>
-              <span>Desde {waveCardinal}</span>
+              <span>{t.from} {waveCardinal}</span>
             </div>
           </div>
         </div>
@@ -918,21 +947,21 @@ export const MarineCard: React.FC<MarineCardProps> = ({ marine }) => {
         <div className="marine-grid">
           <div className="marine-stat">
             <span className="marine-stat-value">{wavePeriod.toFixed(1)}<span className="marine-stat-unit">s</span></span>
-            <span className="marine-stat-label">Período</span>
+            <span className="marine-stat-label">{t.wavePeriod}</span>
           </div>
           <div className="marine-stat">
             <span className="marine-stat-value">{swellHeight.toFixed(1)}<span className="marine-stat-unit">m</span></span>
-            <span className="marine-stat-label">Oleaje fondo</span>
+            <span className="marine-stat-label">{t.swellHeight}</span>
           </div>
           {seaTemperature > 0 && (
             <div className="marine-stat">
               <span className="marine-stat-value">{seaTemperature.toFixed(0)}<span className="marine-stat-unit">°C</span></span>
-              <span className="marine-stat-label">Temp. mar</span>
+              <span className="marine-stat-label">{t.seaTemperature}</span>
             </div>
           )}
           <div className="marine-stat">
             <span className="marine-stat-value">{waveDirection}<span className="marine-stat-unit">°</span></span>
-            <span className="marine-stat-label">Dirección</span>
+            <span className="marine-stat-label">{t.windDirection}</span>
           </div>
         </div>
 

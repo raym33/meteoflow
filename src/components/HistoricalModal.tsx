@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useLanguage } from '../i18n/LanguageContext';
+import { getLocaleForLanguage } from '../services/weatherApi';
 
 // ============================================================================
 // HISTORICAL DATA TYPES
@@ -121,6 +123,8 @@ interface ChartProps {
 }
 
 const HistoryChart: React.FC<ChartProps> = ({ data, unit, color }) => {
+  const { language } = useLanguage();
+  const locale = getLocaleForLanguage(language);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [hoveredPoint, setHoveredPoint] = useState<{ index: number; x: number; y: number } | null>(null);
 
@@ -185,7 +189,7 @@ const HistoryChart: React.FC<ChartProps> = ({ data, unit, color }) => {
       if (i % step === 0 || i === data.length - 1) {
         const x = padding.left + (chartWidth / (data.length - 1)) * i;
         const date = new Date(d.date);
-        const label = date.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
+        const label = date.toLocaleDateString(locale, { day: 'numeric', month: 'short' });
         ctx.fillText(label, x, height - padding.bottom + 20);
       }
     });
@@ -237,7 +241,7 @@ const HistoryChart: React.FC<ChartProps> = ({ data, unit, color }) => {
       ctx.stroke();
     });
 
-  }, [data, color, hoveredPoint]);
+  }, [data, color, hoveredPoint, locale]);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current;
@@ -279,7 +283,7 @@ const HistoryChart: React.FC<ChartProps> = ({ data, unit, color }) => {
             {data[hoveredPoint.index].value.toFixed(1)} {unit}
           </div>
           <div className="tooltip-date">
-            {new Date(data[hoveredPoint.index].date).toLocaleDateString('es-ES', {
+            {new Date(data[hoveredPoint.index].date).toLocaleDateString(locale, {
               weekday: 'short',
               day: 'numeric',
               month: 'short',
@@ -343,6 +347,7 @@ export const HistoricalModal: React.FC<HistoricalModalProps> = ({
   lat,
   lon,
 }) => {
+  const { t } = useLanguage();
   const [data, setData] = useState<HistoricalDataPoint[]>([]);
   const [loading, setLoading] = useState(true);
   const [period, setPeriod] = useState<7 | 14 | 30>(7);
@@ -410,7 +415,7 @@ export const HistoricalModal: React.FC<HistoricalModalProps> = ({
               {currentValue.toFixed(1)} <span className="current-unit">{unit}</span>
             </div>
           </div>
-          <button className="modal-close" onClick={onClose} aria-label="Cerrar">
+          <button className="modal-close" onClick={onClose} aria-label={t.close}>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <line x1="18" y1="6" x2="6" y2="18" />
               <line x1="6" y1="6" x2="18" y2="18" />
@@ -426,7 +431,7 @@ export const HistoricalModal: React.FC<HistoricalModalProps> = ({
                 className={`period-btn ${period === p ? 'active' : ''}`}
                 onClick={() => setPeriod(p)}
               >
-                {p} días
+                {p} {t.days}
               </button>
             ))}
           </div>
@@ -434,7 +439,7 @@ export const HistoricalModal: React.FC<HistoricalModalProps> = ({
           {loading ? (
             <div className="loading-state">
               <div className="loading-spinner" />
-              <span>Cargando historial...</span>
+              <span>{t.loadingHistory}</span>
             </div>
           ) : (
             <>
@@ -443,19 +448,19 @@ export const HistoricalModal: React.FC<HistoricalModalProps> = ({
               {stats && (
                 <div className="stats-grid">
                   <div className="stat-item">
-                    <span className="stat-label">Mínimo</span>
+                    <span className="stat-label">{t.minLabel}</span>
                     <span className="stat-value">{stats.min.toFixed(1)} {unit}</span>
                   </div>
                   <div className="stat-item">
-                    <span className="stat-label">Máximo</span>
+                    <span className="stat-label">{t.maxLabel}</span>
                     <span className="stat-value">{stats.max.toFixed(1)} {unit}</span>
                   </div>
                   <div className="stat-item">
-                    <span className="stat-label">Promedio</span>
+                    <span className="stat-label">{t.average}</span>
                     <span className="stat-value">{stats.avg.toFixed(1)} {unit}</span>
                   </div>
                   <div className="stat-item">
-                    <span className="stat-label">Tendencia</span>
+                    <span className="stat-label">{t.trend}</span>
                     <span className={`stat-value trend ${stats.trend >= 0 ? 'up' : 'down'}`}>
                       {stats.trend >= 0 ? '↑' : '↓'} {Math.abs(stats.trend).toFixed(1)} {unit}
                     </span>
@@ -711,6 +716,7 @@ export const ClickableValue: React.FC<ClickableValueProps> = ({
   className,
   children,
 }) => {
+  const { t } = useLanguage();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
@@ -718,7 +724,7 @@ export const ClickableValue: React.FC<ClickableValueProps> = ({
       <button
         className={`clickable-value ${className || ''}`}
         onClick={() => setIsModalOpen(true)}
-        title="Ver historial"
+        title={t.viewHistory}
       >
         {children || `${value.toFixed(1)} ${unit}`}
         <span className="history-indicator">

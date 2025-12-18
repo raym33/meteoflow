@@ -23,7 +23,7 @@ export const CurrentWeatherCard: React.FC<CurrentWeatherCardProps> = ({
   lat,
   lon,
 }) => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
 
   // Weather code descriptions
   const getWeatherDescription = (code: number): string => {
@@ -82,7 +82,7 @@ export const CurrentWeatherCard: React.FC<CurrentWeatherCardProps> = ({
         </div>
         <div className="status">
           <span className="status-dot" />
-          <span className="status-time">{formatTime(lastUpdated)}</span>
+          <span className="status-time">{formatTime(lastUpdated, language)}</span>
         </div>
       </div>
 
