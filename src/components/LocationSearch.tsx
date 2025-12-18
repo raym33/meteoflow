@@ -25,7 +25,7 @@ export const LocationSearch: React.FC<LocationSearchProps> = ({
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const debounceRef = useRef<NodeJS.Timeout>();
+  const debounceRef = useRef<ReturnType<typeof window.setTimeout>>();
 
   // Handle outside clicks
   useEffect(() => {

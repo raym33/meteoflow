@@ -19,7 +19,7 @@ export const RainRadarCard: React.FC<RainRadarProps> = ({ lat, lon }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const mapRef = useRef<HTMLDivElement>(null);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const intervalRef = useRef<ReturnType<typeof window.setInterval> | null>(null);
 
   // Fetch radar data from RainViewer API
   const fetchRadarData = useCallback(async () => {
